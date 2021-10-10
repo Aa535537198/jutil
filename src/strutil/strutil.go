@@ -5,13 +5,12 @@ import (
 	"strings"
 )
 
-func Format(this string, params ...string) string {
-	if len(params) < 2 {
+func Format(this, pattern string, params ...string) string {
+	if len(params) < 1 {
 		return this
 	}
-	old := params[0]
-	for i := 1; i < len(params); i++ {
-		this = ReplaceString(this, old, params[i], 1)
+	for i := 0; i < len(params); i++ {
+		this = ReplaceString(this, pattern, params[i], 1)
 	}
 	return this
 }
@@ -60,13 +59,39 @@ func ReplaceStringByIndex(this string, old string, new string, startIndex, endIn
 	return (prefix) + strings.Replace(this, old, new, count)
 }
 
-// 去除掉一些字符后是否为空
-func IsEmpty(this string, ignores ...string) bool {
-	if len(this) != 0 && len(ignores) != 0 {
-		for i := 0; i < len(ignores); i++ {
-			compile := regexp.MustCompile(ignores[i])
-			this = compile.ReplaceAllString(this, "")
-		}
+// 这两个是去掉字符串的前缀后缀的，例如去个文件名的扩展名啥。
+func RemovePrefix(this, prefix string) string {
+	hasPrefix := strings.HasPrefix(this, prefix)
+	if hasPrefix {
+		return this[len(prefix):]
 	}
-	return len(this) == 0
+	return this
+}
+
+func RemoveSuffix(this, suffix string) string {
+	hasSuffix := strings.HasSuffix(this, suffix)
+	if hasSuffix {
+		return this[:len(this)-len(suffix)]
+	}
+	return this
+}
+
+func RemovePrefixIgnoreCase(this, prefix string) string {
+	tL := strings.ToLower(this)
+	prefix = strings.ToLower(prefix)
+	hasPrefix := strings.HasPrefix(tL, prefix)
+	if hasPrefix {
+		return this[len(prefix):]
+	}
+	return this
+}
+
+func RemoveSuffixIgnoreCase(this, suffix string) string {
+	tL := strings.ToLower(this)
+	suffix = strings.ToLower(suffix)
+	hasSuffix := strings.HasSuffix(tL, suffix)
+	if hasSuffix {
+		return this[:len(this)-len(suffix)]
+	}
+	return this
 }

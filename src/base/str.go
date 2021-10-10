@@ -29,7 +29,6 @@ func (this Jstr) ReplaceAllString(new string, replaces ...string) Jstr {
 		compile := regexp.MustCompile(replaces[i])
 		this = Jstr(compile.ReplaceAllString(string(this), new))
 	}
-
 	return this
 }
 
