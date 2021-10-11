@@ -1,1 +1,1 @@
-package strutil
+package jstr
